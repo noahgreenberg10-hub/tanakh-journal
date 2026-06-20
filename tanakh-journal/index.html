@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Tanakh" />
+<meta name="theme-color" content="#2d5a3d" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<title>Daily Tanakh SOAP Journal</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e8e4dc;
+  --border-strong: #ccc8be;
+  --text-primary: #1a1814;
+  --text-secondary: #6b6760;
+  --text-tertiary: #9e9a93;
+  --accent: #2d5a3d;
+  --accent-light: #edf4ef;
+  --accent-text: #1e3f2b;
+  --s-bg: #edf4ef; --s-text: #1e3f2b;
+  --o-bg: #f0f4ff; --o-text: #1e2f6b;
+  --a-bg: #fdf5e6; --a-text: #6b3d00;
+  --p-bg: #fdf0f5; --p-text: #6b0033;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1a12;
+    --surface: #1a2b1e;
+    --border: #2a3d2e;
+    --border-strong: #3d5542;
+    --text-primary: #e8f0e9;
+    --text-secondary: #8fa894;
+    --text-tertiary: #5a7060;
+    --accent: #4a8c5c;
+    --accent-light: #1a2b1e;
+    --accent-text: #7ab893;
+    --s-bg: #1a2b1e; --s-text: #7ab893;
+    --o-bg: #1a1f2b; --o-text: #7a8eb8;
+    --a-bg: #2b251a; --a-text: #b89a5a;
+    --p-bg: #2b1a20; --p-text: #b87a8f;
+  }
+}
+
+html { height: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100%;
+  padding: calc(var(--safe-top) + 1rem) 1rem calc(var(--safe-bottom) + 3rem);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page { max-width: 600px; margin: 0 auto; }
+
+/* Header */
+.header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; }
+
+.brand-icon {
+  width: 38px; height: 38px;
+  background: var(--accent);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-icon svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 1.8; }
+
+.brand-text h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.brand-text p { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+
+.header-date { font-size: 12px; color: var(--text-tertiary); text-align: right; }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--border);
+  padding: 3px;
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.15s;
+  font-family: var(--font-sans);
+}
+
+.tab.active {
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.view { display: none; }
+.view.active { display: block; }
+
+/* Verse card */
+.verse-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.verse-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.verse-ref-badge {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(74,140,92,0.2);
+}
+
+.verse-section { font-size: 11px; color: var(--text-tertiary); font-style: italic; }
+
+.verse-text {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--text-primary);
+  padding: 10px 0 10px 14px;
+  border-left: 3px solid var(--accent);
+  margin-bottom: 12px;
+}
+
+.verse-loading {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.btn-new {
+  font-size: 12px;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-sans);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-new:hover { opacity: 0.75; }
+.btn-new svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* SOAP */
+.soap-form { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.25rem; }
+
+.soap-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.soap-badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.soap-badge-s { background: var(--s-bg); color: var(--s-text); }
+.soap-badge-o { background: var(--o-bg); color: var(--o-text); }
+.soap-badge-a { background: var(--a-bg); color: var(--a-text); }
+.soap-badge-p { background: var(--p-bg); color: var(--p-text); }
+
+.soap-hint { font-size: 12px; color: var(--text-tertiary); }
+
+textarea {
+  width: 100%;
+  min-height: 80px;
+  font-size: 15px;
+  line-height: 1.6;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text-primary);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+textarea:focus { border-color: var(--accent); }
+textarea::placeholder { color: var(--text-tertiary); }
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.btn-save {
+  padding: 10px 22px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  -webkit-appearance: none;
+}
+
+.btn-save:active { opacity: 0.8; transform: scale(0.98); }
+
+.btn-clear {
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  -webkit-appearance: none;
+}
+
+.btn-clear:active { background: var(--border); }
+
+.save-toast {
+  display: none;
+  font-size: 13px;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(74,140,92,0.2);
+  align-items: center;
+  gap: 5px;
+}
+
+.save-toast.show { display: inline-flex; }
+.save-toast svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+/* Entries */
+.entries-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.entries-title { font-size: 15px; font-weight: 600; }
+.entry-count { font-size: 12px; color: var(--text-tertiary); }
+
+.entry-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  margin-bottom: 10px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.12s;
+}
+
+.entry-card:active { border-color: var(--accent); }
+
+.entry-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.entry-ref {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.entry-date { font-size: 12px; color: var(--text-tertiary); }
+
+.entry-preview {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-full {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.entry-full.open { display: block; }
+
+.soap-mini { margin-bottom: 10px; }
+.soap-mini-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 3px;
+}
+.soap-mini-text { font-size: 13px; color: var(--text-primary); line-height: 1.6; }
+
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-tertiary);
+  font-size: 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  text-align: center;
+}
+
+.stat-number { font-size: 28px; font-weight: 600; color: var(--accent); }
+.stat-label { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+.streak-card {
+  background: var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.streak-num { font-size: 48px; font-weight: 700; color: #fff; line-height: 1; }
+.streak-label { font-size: 14px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+
+.spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <div class="brand-text">
+          <h1>Tanakh study</h1>
+          <p>Daily SOAP journal</p>
+        </div>
+      </div>
+      <div class="header-date" id="header-date"></div>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('today')">Today</button>
+    <button class="tab" onclick="switchTab('entries')">Entries</button>
+    <button class="tab" onclick="switchTab('stats')">Stats</button>
+  </div>
+
+  <!-- TODAY TAB -->
+  <div class="view active" id="view-today">
+
+    <div class="verse-card">
+      <div class="verse-top">
+        <span class="verse-ref-badge" id="verse-ref">Loading...</span>
+        <span class="verse-section" id="verse-section"></span>
+      </div>
+      <div class="verse-text" id="verse-text">
+        <span class="verse-loading"><span class="spinner"></span>Fetching today's verse...</span>
+      </div>
+      <button class="btn-new" onclick="fetchVerse()">
+        <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Different verse
+      </button>
+    </div>
+
+    <div class="soap-form">
+      <div>
+        <div class="soap-label-row">
+          <span class="soap-badge soap-badge-s">S — Scripture</span>
+          <span class="soap-hint">The verse or phrase that stands out</span>
+        </div>
+        <textarea id="soap-s" placeholder="Write the key verse or phrase..."></textarea>
+      </div>
+      <div>
+        <div class="soap-label-row">
+          <span class="soap-badge soap-badge-o">O — Observation</span>
+          <span class="soap-hint">What does this passage say?</span>
+        </div>
+        <textarea id="soap-o" placeholder="What do you notice about this text?"></textarea>
+      </div>
+      <div>
+        <div class="soap-label-row">
+          <span class="soap-badge soap-badge-a">A — Application</span>
+          <span class="soap-hint">How does this apply to your life?</span>
+        </div>
+        <textarea id="soap-a" placeholder="How does this speak to where you are right now?"></textarea>
+      </div>
+      <div>
+        <div class="soap-label-row">
+          <span class="soap-badge soap-badge-p">P — Prayer</span>
+          <span class="soap-hint">Respond to God based on what you read</span>
+        </div>
+        <textarea id="soap-p" placeholder="Write a short prayer in response..."></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-save" onclick="saveEntry()">Save entry</button>
+      <button class="btn-clear" onclick="clearForm()">Clear</button>
+      <span class="save-toast" id="save-toast">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Saved
+      </span>
+    </div>
+
+  </div>
+
+  <!-- ENTRIES TAB -->
+  <div class="view" id="view-entries">
+    <div class="entries-header">
+      <span class="entries-title">All entries</span>
+      <span class="entry-count" id="entry-count">0 entries</span>
+    </div>
+    <div id="entries-list"></div>
+  </div>
+
+  <!-- STATS TAB -->
+  <div class="view" id="view-stats">
+    <div class="streak-card">
+      <div class="streak-num" id="streak-num">0</div>
+      <div class="streak-label">day streak</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="stat-total">0</div>
+        <div class="stat-label">total entries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-this-month">0</div>
+        <div class="stat-label">this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-sections">0</div>
+        <div class="stat-label">books covered</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const STORAGE_KEY = 'tanakh_soap_v1';
+const VERSES = [
+  { ref: "Bereishit 1:1", section: "Torah", text: "In the beginning God created the heavens and the earth." },
+  { ref: "Shemot 14:14", section: "Torah", text: "The Lord will fight for you; you need only to be still." },
+  { ref: "Devarim 6:5", section: "Torah", text: "Love the Lord your God with all your heart and with all your soul and with all your strength." },
+  { ref: "Devarim 31:6", section: "Torah", text: "Be strong and courageous. Do not be afraid or terrified, for the Lord your God goes with you; he will never leave you nor forsake you." },
+  { ref: "Vayikra 19:18", section: "Torah", text: "Love your neighbor as yourself. I am the Lord." },
+  { ref: "Bamidbar 6:24-26", section: "Torah", text: "The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you; the Lord turn his face toward you and give you peace." },
+  { ref: "Tehillim 23:1-3", section: "Ketuvim", text: "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures; he leads me beside still waters. He restores my soul." },
+  { ref: "Tehillim 27:1", section: "Ketuvim", text: "The Lord is my light and my salvation — whom shall I fear? The Lord is the stronghold of my life — of whom shall I be afraid?" },
+  { ref: "Tehillim 46:10", section: "Ketuvim", text: "Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth." },
+  { ref: "Tehillim 119:105", section: "Ketuvim", text: "Your word is a lamp for my feet, a light on my path." },
+  { ref: "Tehillim 34:8", section: "Ketuvim", text: "Taste and see that the Lord is good; blessed is the one who takes refuge in him." },
+  { ref: "Tehillim 1:1-2", section: "Ketuvim", text: "Blessed is the one who does not walk in step with the wicked, but whose delight is in the Torah of the Lord, and who meditates on his Torah day and night." },
+  { ref: "Tehillim 139:14", section: "Ketuvim", text: "I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well." },
+  { ref: "Mishlei 3:5-6", section: "Ketuvim", text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight." },
+  { ref: "Mishlei 16:3", section: "Ketuvim", text: "Commit to the Lord whatever you do, and he will establish your plans." },
+  { ref: "Mishlei 4:23", section: "Ketuvim", text: "Above all else, guard your heart, for everything you do flows from it." },
+  { ref: "Kohelet 3:1", section: "Ketuvim", text: "There is a time for everything, and a season for every activity under the heavens." },
+  { ref: "Iyov 19:25", section: "Ketuvim", text: "I know that my Redeemer lives, and that in the end he will stand on the earth." },
+  { ref: "Yeshayahu 40:31", section: "Nevi'im", text: "Those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint." },
+  { ref: "Yeshayahu 41:10", section: "Nevi'im", text: "Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand." },
+  { ref: "Yeshayahu 55:8-9", section: "Nevi'im", text: "For my thoughts are not your thoughts, neither are your ways my ways, declares the Lord. As the heavens are higher than the earth, so are my ways higher than your ways." },
+  { ref: "Yirmiyahu 29:11", section: "Nevi'im", text: "For I know the plans I have for you, declares the Lord — plans to prosper you and not to harm you, plans to give you hope and a future." },
+  { ref: "Michah 6:8", section: "Nevi'im", text: "He has shown you, O mortal, what is good. And what does the Lord require of you? To act justly and to love mercy and to walk humbly with your God." },
+  { ref: "Yehoshua 1:9", section: "Nevi'im", text: "Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go." }
+];
+
+let currentVerse = null;
+let entries = [];
+let usedIndices = new Set();
+
+try {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) entries = JSON.parse(raw);
+} catch(e) {}
+
+function setDate() {
+  document.getElementById('header-date').textContent =
+    new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const names = ['today','entries','stats'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (name === 'entries') renderEntries();
+  if (name === 'stats') renderStats();
+}
+
+function pickVerse() {
+  const available = VERSES.map((_, i) => i).filter(i => !usedIndices.has(i));
+  const pool = available.length ? available : VERSES.map((_, i) => i);
+  const idx = pool[Math.floor(Math.random() * pool.length)];
+  usedIndices.add(idx);
+  return VERSES[idx];
+}
+
+async function fetchVerse() {
+  const textEl = document.getElementById('verse-text');
+  const refEl = document.getElementById('verse-ref');
+  const secEl = document.getElementById('verse-section');
+
+  textEl.innerHTML = '<span class="verse-loading"><span class="spinner"></span>Fetching verse...</span>';
+  refEl.textContent = 'Loading...';
+  secEl.textContent = '';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 300,
+        system: 'You select meaningful Tanakh verses for daily study, rotating across Torah, Nevi\'im, and Ketuvim. Respond ONLY with valid JSON — no markdown, no backticks, no extra text. Format exactly: {"ref":"Hebrew book name Chapter:Verse","section":"Torah","text":"verse text"}. Use Hebrew book names. Section must be one of: Torah, Nevi\'im, Ketuvim. Use JPS-style translation.',
+        messages: [{ role: 'user', content: 'Give me one meaningful Tanakh verse for personal study and reflection today.' }]
+      })
+    });
+    const data = await res.json();
+    const raw = (data.content?.find(b => b.type === 'text')?.text || '').replace(/```[a-z]*|```/g, '').trim();
+    const parsed = JSON.parse(raw);
+    currentVerse = parsed;
+    refEl.textContent = parsed.ref;
+    secEl.textContent = parsed.section || '';
+    textEl.textContent = parsed.text;
+  } catch(e) {
+    const fallback = pickVerse();
+    currentVerse = fallback;
+    refEl.textContent = fallback.ref;
+    secEl.textContent = fallback.section;
+    textEl.textContent = fallback.text;
+  }
+}
+
+function clearForm() {
+  ['soap-s','soap-o','soap-a','soap-p'].forEach(id => document.getElementById(id).value = '');
+}
+
+function saveEntry() {
+  const s = document.getElementById('soap-s').value.trim();
+  const o = document.getElementById('soap-o').value.trim();
+  const a = document.getElementById('soap-a').value.trim();
+  const p = document.getElementById('soap-p').value.trim();
+  if (!s && !o && !a && !p) return;
+
+  entries.unshift({
+    id: Date.now(),
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    isoDate: new Date().toISOString().split('T')[0],
+    ref: currentVerse?.ref || '—',
+    section: currentVerse?.section || '',
+    verseText: currentVerse?.text || '',
+    s, o, a, p
+  });
+
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch(e) {}
+  clearForm();
+
+  const toast = document.getElementById('save-toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+function renderEntries() {
+  const list = document.getElementById('entries-list');
+  const count = document.getElementById('entry-count');
+  count.textContent = entries.length + (entries.length === 1 ? ' entry' : ' entries');
+
+  if (!entries.length) {
+    list.innerHTML = '<div class="empty-state">No entries yet — write your first reflection on the Today tab</div>';
+    return;
+  }
+
+  list.innerHTML = entries.map((e, i) => `
+    <div class="entry-card" onclick="toggleEntry(${i})" id="ec-${i}">
+      <div class="entry-top">
+        <span class="entry-ref">${e.ref}</span>
+        <span class="entry-date">${e.date}</span>
+      </div>
+      <div class="entry-preview" id="ep-${i}">${e.s || e.o || e.a || e.p || '—'}</div>
+      <div class="entry-full" id="ef-${i}">
+        ${e.verseText ? `<div class="soap-mini"><div class="soap-mini-label">Verse</div><div class="soap-mini-text" style="font-family:Georgia,serif;font-style:italic;">${e.verseText}</div></div>` : ''}
+        ${e.s ? `<div class="soap-mini"><div class="soap-mini-label">S — Scripture</div><div class="soap-mini-text">${e.s}</div></div>` : ''}
+        ${e.o ? `<div class="soap-mini"><div class="soap-mini-label">O — Observation</div><div class="soap-mini-text">${e.o}</div></div>` : ''}
+        ${e.a ? `<div class="soap-mini"><div class="soap-mini-label">A — Application</div><div class="soap-mini-text">${e.a}</div></div>` : ''}
+        ${e.p ? `<div class="soap-mini"><div class="soap-mini-label">P — Prayer</div><div class="soap-mini-text">${e.p}</div></div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleEntry(i) {
+  const full = document.getElementById('ef-' + i);
+  const preview = document.getElementById('ep-' + i);
+  const open = full.classList.toggle('open');
+  preview.style.display = open ? 'none' : '';
+}
+
+function calcStreak() {
+  if (!entries.length) return 0;
+  const dates = [...new Set(entries.map(e => e.isoDate))].sort().reverse();
+  let streak = 0;
+  let expected = new Date().toISOString().split('T')[0];
+  for (const d of dates) {
+    if (d === expected) {
+      streak++;
+      const prev = new Date(expected);
+      prev.setDate(prev.getDate() - 1);
+      expected = prev.toISOString().split('T')[0];
+    } else break;
+  }
+  return streak;
+}
+
+function renderStats() {
+  const now = new Date();
+  const thisMonth = entries.filter(e => {
+    const d = new Date(e.isoDate || e.date);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).length;
+  const books = new Set(entries.map(e => e.ref?.split(' ')[0]).filter(Boolean)).size;
+
+  document.getElementById('streak-num').textContent = calcStreak();
+  document.getElementById('stat-total').textContent = entries.length;
+  document.getElementById('stat-this-month').textContent = thisMonth;
+  document.getElementById('stat-sections').textContent = books;
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+setDate();
+fetchVerse();
+</script>
+</body>
+</html>
