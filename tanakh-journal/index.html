@@ -14,44 +14,60 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #faf9f6;
+  --bg: #f5f3ee;
   --surface: #ffffff;
-  --border: #e8e4dc;
-  --border-strong: #ccc8be;
-  --text-primary: #1a1814;
-  --text-secondary: #6b6760;
-  --text-tertiary: #9e9a93;
+  --surface-raised: #ffffff;
+  --border: #e4dfd4;
+  --border-strong: #c8c2b5;
+  --text-primary: #18160f;
+  --text-secondary: #62594a;
+  --text-tertiary: #9c9486;
   --accent: #2d5a3d;
-  --accent-light: #edf4ef;
-  --accent-text: #1e3f2b;
-  --s-bg: #edf4ef; --s-text: #1e3f2b;
-  --o-bg: #f0f4ff; --o-text: #1e2f6b;
-  --a-bg: #fdf5e6; --a-text: #6b3d00;
-  --p-bg: #fdf0f5; --p-text: #6b0033;
+  --accent-hover: #245030;
+  --accent-light: #e8f2eb;
+  --accent-text: #1c3d28;
+  --accent-border: rgba(45,90,61,0.2);
+  --s-bg: #e8f2eb; --s-text: #1c3d28; --s-border: rgba(45,90,61,0.25);
+  --o-bg: #eaf0ff; --o-text: #1e2e6e; --o-border: rgba(30,46,110,0.2);
+  --a-bg: #fdf3e3; --a-text: #5c3300; --a-border: rgba(92,51,0,0.2);
+  --p-bg: #fceef4; --p-text: #5c0028; --p-border: rgba(92,0,40,0.2);
+  --danger: #c0392b;
+  --danger-light: #fdf0ee;
   --font-serif: Georgia, 'Times New Roman', serif;
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --radius: 12px;
-  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tab-h: 56px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0f1a12;
-    --surface: #1a2b1e;
-    --border: #2a3d2e;
-    --border-strong: #3d5542;
-    --text-primary: #e8f0e9;
-    --text-secondary: #8fa894;
-    --text-tertiary: #5a7060;
+    --bg: #0d1710;
+    --surface: #162019;
+    --surface-raised: #1c2a1f;
+    --border: #253028;
+    --border-strong: #344038;
+    --text-primary: #e4ede5;
+    --text-secondary: #7a9480;
+    --text-tertiary: #4d6652;
     --accent: #4a8c5c;
-    --accent-light: #1a2b1e;
+    --accent-hover: #56a36b;
+    --accent-light: #162019;
     --accent-text: #7ab893;
-    --s-bg: #1a2b1e; --s-text: #7ab893;
-    --o-bg: #1a1f2b; --o-text: #7a8eb8;
-    --a-bg: #2b251a; --a-text: #b89a5a;
-    --p-bg: #2b1a20; --p-text: #b87a8f;
+    --accent-border: rgba(74,140,92,0.25);
+    --s-bg: #182a1c; --s-text: #7ab893; --s-border: rgba(74,140,92,0.2);
+    --o-bg: #181f2e; --o-text: #7a8eb8; --o-border: rgba(122,142,184,0.2);
+    --a-bg: #28200f; --a-text: #c4964a; --a-border: rgba(196,150,74,0.2);
+    --p-bg: #281020; --p-text: #c47a9a; --p-border: rgba(196,122,154,0.2);
+    --danger: #e05d4e;
+    --danger-light: #2a1410;
+    --shadow-sm: 0 1px 4px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
   }
 }
 
@@ -62,91 +78,100 @@ body {
   background: var(--bg);
   color: var(--text-primary);
   min-height: 100%;
-  padding: calc(var(--safe-top) + 1rem) 1rem calc(var(--safe-bottom) + 3rem);
+  padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + var(--tab-h) + 24px);
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
 }
 
-.page { max-width: 600px; margin: 0 auto; }
+.page { max-width: 580px; margin: 0 auto; }
 
-/* Header */
+/* ── Header ── */
 .header {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.header-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-bottom: 20px;
 }
 
-.brand { display: flex; align-items: center; gap: 10px; }
+.brand { display: flex; align-items: center; gap: 11px; }
 
 .brand-icon {
-  width: 38px; height: 38px;
+  width: 40px; height: 40px;
   background: var(--accent);
-  border-radius: 10px;
+  border-radius: 11px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(45,90,61,0.3);
 }
 
 .brand-icon svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 1.8; }
 
-.brand-text h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
-.brand-text p { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+.brand-text h1 { font-size: 16px; font-weight: 700; letter-spacing: -0.025em; }
+.brand-text p { font-size: 11.5px; color: var(--text-secondary); margin-top: 1px; }
 
-.header-date { font-size: 12px; color: var(--text-tertiary); text-align: right; }
+.header-date {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: right;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
 
-/* Tabs */
+/* ── Tabs ── */
 .tabs {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   background: var(--border);
   padding: 3px;
-  border-radius: 10px;
-  margin-bottom: 1.25rem;
+  border-radius: 11px;
+  margin-bottom: 20px;
 }
 
 .tab {
   flex: 1;
-  padding: 7px;
+  padding: 8px 4px;
   font-size: 13px;
   font-weight: 500;
   text-align: center;
   border: none;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   cursor: pointer;
   border-radius: 8px;
-  transition: all 0.15s;
+  transition: all 0.18s ease;
   font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .tab.active {
   background: var(--surface);
   color: var(--text-primary);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
 }
 
 .view { display: none; }
-.view.active { display: block; }
+.view.active { display: block; animation: fadeIn 0.18s ease; }
 
-/* Verse card */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* ── Verse card ── */
 .verse-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
 }
 
 .verse-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 14px;
   flex-wrap: wrap;
   gap: 6px;
 }
@@ -154,24 +179,34 @@ body {
 .verse-ref-badge {
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: var(--accent-text);
   background: var(--accent-light);
   padding: 4px 12px;
   border-radius: 20px;
-  border: 1px solid rgba(74,140,92,0.2);
+  border: 1px solid var(--accent-border);
 }
 
-.verse-section { font-size: 11px; color: var(--text-tertiary); font-style: italic; }
+.verse-section {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-style: italic;
+  background: var(--bg);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
 
 .verse-text {
   font-family: var(--font-serif);
   font-size: 16px;
-  line-height: 1.85;
+  line-height: 1.9;
   color: var(--text-primary);
-  padding: 10px 0 10px 14px;
+  padding: 12px 14px;
   border-left: 3px solid var(--accent);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  background: var(--bg);
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
 }
 
 .verse-loading {
@@ -179,10 +214,13 @@ body {
   font-size: 14px;
   color: var(--text-tertiary);
   font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-new {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--accent);
   background: none;
   border: none;
@@ -191,35 +229,50 @@ body {
   font-family: var(--font-sans);
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.btn-new:hover { opacity: 0.75; }
+.btn-new:active { opacity: 0.6; }
 .btn-new svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
 
-/* SOAP */
-.soap-form { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.25rem; }
+/* ── SOAP form ── */
+.soap-form { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; }
+
+.soap-field {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s;
+}
+
+.soap-field:focus-within { border-color: var(--accent); }
 
 .soap-label-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 .soap-badge {
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   padding: 3px 10px;
   border-radius: 20px;
   flex-shrink: 0;
+  border: 1px solid transparent;
 }
 
-.soap-badge-s { background: var(--s-bg); color: var(--s-text); }
-.soap-badge-o { background: var(--o-bg); color: var(--o-text); }
-.soap-badge-a { background: var(--a-bg); color: var(--a-text); }
-.soap-badge-p { background: var(--p-bg); color: var(--p-text); }
+.soap-badge-s { background: var(--s-bg); color: var(--s-text); border-color: var(--s-border); }
+.soap-badge-o { background: var(--o-bg); color: var(--o-text); border-color: var(--o-border); }
+.soap-badge-a { background: var(--a-bg); color: var(--a-text); border-color: var(--a-border); }
+.soap-badge-p { background: var(--p-bg); color: var(--p-text); border-color: var(--p-border); }
 
 .soap-hint { font-size: 12px; color: var(--text-tertiary); }
 
@@ -227,37 +280,38 @@ textarea {
   width: 100%;
   min-height: 80px;
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.65;
   resize: vertical;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   color: var(--text-primary);
-  background: var(--surface);
+  background: transparent;
   font-family: var(--font-sans);
   -webkit-appearance: none;
   outline: none;
-  transition: border-color 0.15s;
 }
 
-textarea:focus { border-color: var(--accent); }
 textarea::placeholder { color: var(--text-tertiary); }
 
-/* Actions */
+/* ── Actions ── */
 .actions {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 1.5rem;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-save {
-  padding: 10px 22px;
+  padding: 11px 24px;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   border-radius: var(--radius-sm);
   border: none;
   background: var(--accent);
@@ -265,13 +319,17 @@ textarea::placeholder { color: var(--text-tertiary); }
   cursor: pointer;
   font-family: var(--font-sans);
   -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: -0.01em;
 }
 
-.btn-save:active { opacity: 0.8; transform: scale(0.98); }
+.btn-save:active { background: var(--accent-hover); transform: scale(0.97); }
 
 .btn-clear {
-  padding: 10px 18px;
+  padding: 11px 18px;
   font-size: 15px;
+  font-weight: 500;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-strong);
   background: transparent;
@@ -279,6 +337,8 @@ textarea::placeholder { color: var(--text-tertiary); }
   cursor: pointer;
   font-family: var(--font-sans);
   -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
 }
 
 .btn-clear:active { background: var(--border); }
@@ -286,47 +346,124 @@ textarea::placeholder { color: var(--text-tertiary); }
 .save-toast {
   display: none;
   font-size: 13px;
+  font-weight: 500;
   color: var(--accent-text);
   background: var(--accent-light);
-  padding: 6px 12px;
+  padding: 7px 14px;
   border-radius: 20px;
-  border: 1px solid rgba(74,140,92,0.2);
+  border: 1px solid var(--accent-border);
   align-items: center;
   gap: 5px;
+  animation: toastIn 0.2s ease;
 }
+
+@keyframes toastIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
 
 .save-toast.show { display: inline-flex; }
 .save-toast svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
-/* Entries */
+/* ── Entries tab ── */
 .entries-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 12px;
 }
 
 .entries-title { font-size: 15px; font-weight: 600; }
 .entry-count { font-size: 12px; color: var(--text-tertiary); }
 
+/* Search bar */
+.search-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  stroke: var(--text-tertiary);
+  fill: none;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 38px 0 38px;
+  font-size: 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+
+.search-input:focus { border-color: var(--accent); }
+.search-input::placeholder { color: var(--text-tertiary); }
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px; height: 20px;
+  background: var(--border);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.search-clear.visible { display: flex; }
+.search-clear svg { width: 10px; height: 10px; stroke: var(--text-secondary); fill: none; stroke-width: 2.5; }
+
+/* Entry cards */
 .entry-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1rem 1.1rem;
   margin-bottom: 10px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
   transition: border-color 0.12s;
 }
 
-.entry-card:active { border-color: var(--accent); }
+.entry-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.entry-card-header:active { background: var(--bg); }
+
+.entry-header-left {
+  flex: 1;
+  min-width: 0;
+}
 
 .entry-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
   margin-bottom: 5px;
+  flex-wrap: wrap;
 }
 
 .entry-ref {
@@ -336,6 +473,8 @@ textarea::placeholder { color: var(--text-tertiary); }
   background: var(--accent-light);
   padding: 3px 10px;
   border-radius: 20px;
+  border: 1px solid var(--accent-border);
+  flex-shrink: 0;
 }
 
 .entry-date { font-size: 12px; color: var(--text-tertiary); }
@@ -348,65 +487,168 @@ textarea::placeholder { color: var(--text-tertiary); }
   text-overflow: ellipsis;
 }
 
+.entry-chevron {
+  width: 16px; height: 16px;
+  stroke: var(--text-tertiary);
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.entry-card.open .entry-chevron { transform: rotate(180deg); }
+
+.btn-delete {
+  width: 32px; height: 32px;
+  border: none;
+  background: var(--danger-light);
+  color: var(--danger);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.12s;
+}
+
+.btn-delete:active { background: var(--danger); color: #fff; }
+.btn-delete svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
 .entry-full {
   display: none;
-  margin-top: 12px;
-  padding-top: 12px;
+  padding: 0 14px 14px;
   border-top: 1px solid var(--border);
 }
 
-.entry-full.open { display: block; }
+.entry-card.open .entry-full { display: block; }
 
-.soap-mini { margin-bottom: 10px; }
+.verse-quote {
+  font-family: var(--font-serif);
+  font-size: 13.5px;
+  font-style: italic;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  padding: 10px 12px;
+  border-left: 2.5px solid var(--accent);
+  background: var(--bg);
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  margin: 12px 0;
+}
+
+.soap-mini { margin-top: 12px; }
 .soap-mini-label {
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-tertiary);
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
-.soap-mini-text { font-size: 13px; color: var(--text-primary); line-height: 1.6; }
+.soap-mini-text { font-size: 14px; color: var(--text-primary); line-height: 1.65; }
+
+.no-results {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.no-results strong { color: var(--text-secondary); display: block; margin-bottom: 4px; font-size: 15px; }
 
 .empty-state {
   text-align: center;
-  padding: 2.5rem 1rem;
+  padding: 3rem 1.5rem;
   color: var(--text-tertiary);
   font-size: 14px;
-  border: 1px dashed var(--border-strong);
+  border: 1.5px dashed var(--border-strong);
   border-radius: var(--radius);
+  line-height: 1.6;
 }
 
-/* Stats */
+.empty-state strong {
+  display: block;
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+/* ── Stats ── */
+.streak-card {
+  background: var(--accent);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  margin-bottom: 14px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(45,90,61,0.25);
+}
+
+.streak-num {
+  font-size: 56px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.streak-label { font-size: 14px; color: rgba(255,255,255,0.75); margin-top: 6px; font-weight: 500; }
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 16px;
 }
 
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1rem;
+  padding: 16px 12px;
   text-align: center;
+  box-shadow: var(--shadow-sm);
 }
 
-.stat-number { font-size: 28px; font-weight: 600; color: var(--accent); }
-.stat-label { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+.stat-number {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
 
-.streak-card {
-  background: var(--accent);
+.stat-label { font-size: 11px; color: var(--text-tertiary); margin-top: 5px; font-weight: 500; }
+
+.section-breakdown {
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
-  text-align: center;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
-.streak-num { font-size: 48px; font-weight: 700; color: #fff; line-height: 1; }
-.streak-label { font-size: 14px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+.section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
 
+.section-row:last-child { border-bottom: none; }
+.section-row-label { color: var(--text-secondary); font-weight: 500; }
+.section-row-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+/* ── Spinner ── */
 .spinner {
   display: inline-block;
   width: 14px; height: 14px;
@@ -414,29 +656,87 @@ textarea::placeholder { color: var(--text-tertiary); }
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
-  vertical-align: middle;
-  margin-right: 6px;
+  flex-shrink: 0;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Delete confirm overlay ── */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 16px calc(var(--safe-bottom) + 16px);
+  z-index: 100;
+  animation: overlayIn 0.18s ease;
+}
+
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+
+.confirm-sheet {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow-md);
+  animation: sheetIn 0.22s ease;
+}
+
+@keyframes sheetIn { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.confirm-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.confirm-body { font-size: 14px; color: var(--text-secondary); margin-bottom: 18px; line-height: 1.5; }
+
+.confirm-actions { display: flex; gap: 10px; }
+
+.btn-confirm-cancel {
+  flex: 1;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+.btn-confirm-delete {
+  flex: 1;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--danger);
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+.btn-confirm-delete:active { opacity: 0.85; }
+.btn-confirm-cancel:active { background: var(--border); }
 </style>
 </head>
 <body>
 <div class="page">
 
   <header class="header">
-    <div class="header-top">
-      <div class="brand">
-        <div class="brand-icon">
-          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        </div>
-        <div class="brand-text">
-          <h1>Tanakh study</h1>
-          <p>Daily SOAP journal</p>
-        </div>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       </div>
-      <div class="header-date" id="header-date"></div>
+      <div class="brand-text">
+        <h1>Tanakh study</h1>
+        <p>Daily SOAP journal</p>
+      </div>
     </div>
+    <div class="header-date" id="header-date"></div>
   </header>
 
   <div class="tabs">
@@ -450,11 +750,11 @@ textarea::placeholder { color: var(--text-tertiary); }
 
     <div class="verse-card">
       <div class="verse-top">
-        <span class="verse-ref-badge" id="verse-ref">Loading...</span>
+        <span class="verse-ref-badge" id="verse-ref">Loading…</span>
         <span class="verse-section" id="verse-section"></span>
       </div>
       <div class="verse-text" id="verse-text">
-        <span class="verse-loading"><span class="spinner"></span>Fetching today's verse...</span>
+        <span class="verse-loading"><span class="spinner"></span>Fetching today's verse…</span>
       </div>
       <button class="btn-new" onclick="fetchVerse()">
         <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
@@ -463,33 +763,33 @@ textarea::placeholder { color: var(--text-tertiary); }
     </div>
 
     <div class="soap-form">
-      <div>
+      <div class="soap-field">
         <div class="soap-label-row">
           <span class="soap-badge soap-badge-s">S — Scripture</span>
           <span class="soap-hint">The verse or phrase that stands out</span>
         </div>
-        <textarea id="soap-s" placeholder="Write the key verse or phrase..."></textarea>
+        <textarea id="soap-s" placeholder="Write the key verse or phrase…" rows="3"></textarea>
       </div>
-      <div>
+      <div class="soap-field">
         <div class="soap-label-row">
           <span class="soap-badge soap-badge-o">O — Observation</span>
           <span class="soap-hint">What does this passage say?</span>
         </div>
-        <textarea id="soap-o" placeholder="What do you notice about this text?"></textarea>
+        <textarea id="soap-o" placeholder="What do you notice about this text?" rows="3"></textarea>
       </div>
-      <div>
+      <div class="soap-field">
         <div class="soap-label-row">
           <span class="soap-badge soap-badge-a">A — Application</span>
           <span class="soap-hint">How does this apply to your life?</span>
         </div>
-        <textarea id="soap-a" placeholder="How does this speak to where you are right now?"></textarea>
+        <textarea id="soap-a" placeholder="How does this speak to where you are right now?" rows="3"></textarea>
       </div>
-      <div>
+      <div class="soap-field">
         <div class="soap-label-row">
           <span class="soap-badge soap-badge-p">P — Prayer</span>
           <span class="soap-hint">Respond to God based on what you read</span>
         </div>
-        <textarea id="soap-p" placeholder="Write a short prayer in response..."></textarea>
+        <textarea id="soap-p" placeholder="Write a short prayer in response…" rows="3"></textarea>
       </div>
     </div>
 
@@ -510,6 +810,22 @@ textarea::placeholder { color: var(--text-tertiary); }
       <span class="entries-title">All entries</span>
       <span class="entry-count" id="entry-count">0 entries</span>
     </div>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input
+        class="search-input"
+        id="search-input"
+        type="search"
+        placeholder="Search entries…"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        oninput="onSearch(this.value)"
+      />
+      <button class="search-clear" id="search-clear" onclick="clearSearch()" aria-label="Clear search">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
     <div id="entries-list"></div>
   </div>
 
@@ -529,12 +845,25 @@ textarea::placeholder { color: var(--text-tertiary); }
         <div class="stat-label">this month</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number" id="stat-sections">0</div>
+        <div class="stat-number" id="stat-books">0</div>
         <div class="stat-label">books covered</div>
       </div>
     </div>
+    <div class="section-breakdown" id="section-breakdown"></div>
   </div>
 
+</div>
+
+<!-- Delete confirm sheet -->
+<div class="confirm-overlay" id="confirm-overlay" style="display:none" onclick="cancelDelete(event)">
+  <div class="confirm-sheet" onclick="event.stopPropagation()">
+    <div class="confirm-title">Delete this entry?</div>
+    <div class="confirm-body" id="confirm-body">This can't be undone.</div>
+    <div class="confirm-actions">
+      <button class="btn-confirm-cancel" onclick="cancelDelete()">Cancel</button>
+      <button class="btn-confirm-delete" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -569,11 +898,17 @@ const VERSES = [
 let currentVerse = null;
 let entries = [];
 let usedIndices = new Set();
+let searchQuery = '';
+let pendingDeleteId = null;
 
 try {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (raw) entries = JSON.parse(raw);
 } catch(e) {}
+
+function persist() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch(e) {}
+}
 
 function setDate() {
   document.getElementById('header-date').textContent =
@@ -582,8 +917,7 @@ function setDate() {
 
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach((t, i) => {
-    const names = ['today','entries','stats'];
-    t.classList.toggle('active', names[i] === name);
+    t.classList.toggle('active', ['today','entries','stats'][i] === name);
   });
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
@@ -604,8 +938,8 @@ async function fetchVerse() {
   const refEl = document.getElementById('verse-ref');
   const secEl = document.getElementById('verse-section');
 
-  textEl.innerHTML = '<span class="verse-loading"><span class="spinner"></span>Fetching verse...</span>';
-  refEl.textContent = 'Loading...';
+  textEl.innerHTML = '<span class="verse-loading"><span class="spinner"></span>Fetching verse…</span>';
+  refEl.textContent = 'Loading…';
   secEl.textContent = '';
 
   try {
@@ -636,7 +970,7 @@ async function fetchVerse() {
 }
 
 function clearForm() {
-  ['soap-s','soap-o','soap-a','soap-p'].forEach(id => document.getElementById(id).value = '');
+  ['soap-s','soap-o','soap-a','soap-p'].forEach(id => { document.getElementById(id).value = ''; });
 }
 
 function saveEntry() {
@@ -656,12 +990,73 @@ function saveEntry() {
     s, o, a, p
   });
 
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch(e) {}
+  persist();
   clearForm();
 
   const toast = document.getElementById('save-toast');
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+/* ── Search ── */
+function onSearch(val) {
+  searchQuery = val.trim().toLowerCase();
+  document.getElementById('search-clear').classList.toggle('visible', val.length > 0);
+  renderEntries();
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  onSearch('');
+}
+
+function filteredEntries() {
+  if (!searchQuery) return entries;
+  return entries.filter(e => {
+    const hay = [e.ref, e.section, e.verseText, e.s, e.o, e.a, e.p, e.date]
+      .join(' ').toLowerCase();
+    return hay.includes(searchQuery);
+  });
+}
+
+/* ── Delete ── */
+function promptDelete(id, ref, event) {
+  event.stopPropagation();
+  pendingDeleteId = id;
+  document.getElementById('confirm-body').textContent = `Delete the entry for ${ref}? This can't be undone.`;
+  document.getElementById('confirm-overlay').style.display = 'flex';
+}
+
+function cancelDelete(event) {
+  if (event && event.target !== document.getElementById('confirm-overlay')) return;
+  document.getElementById('confirm-overlay').style.display = 'none';
+  pendingDeleteId = null;
+}
+
+function confirmDelete() {
+  if (pendingDeleteId === null) return;
+  entries = entries.filter(e => e.id !== pendingDeleteId);
+  persist();
+  pendingDeleteId = null;
+  document.getElementById('confirm-overlay').style.display = 'none';
+  renderEntries();
+  renderStats();
+}
+
+/* ── Render entries ── */
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function highlight(text, query) {
+  if (!query) return esc(text);
+  const escaped = esc(text);
+  const q = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return escaped.replace(new RegExp(`(${q})`, 'gi'), '<mark style="background:var(--accent-light);color:var(--accent-text);border-radius:2px;padding:0 1px">$1</mark>');
 }
 
 function renderEntries() {
@@ -670,35 +1065,52 @@ function renderEntries() {
   count.textContent = entries.length + (entries.length === 1 ? ' entry' : ' entries');
 
   if (!entries.length) {
-    list.innerHTML = '<div class="empty-state">No entries yet — write your first reflection on the Today tab</div>';
+    list.innerHTML = '<div class="empty-state"><strong>No entries yet</strong>Write your first reflection on the Today tab</div>';
     return;
   }
 
-  list.innerHTML = entries.map((e, i) => `
-    <div class="entry-card" onclick="toggleEntry(${i})" id="ec-${i}">
-      <div class="entry-top">
-        <span class="entry-ref">${e.ref}</span>
-        <span class="entry-date">${e.date}</span>
+  const filtered = filteredEntries();
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="no-results"><strong>No results for "${esc(searchQuery)}"</strong>Try a different search term</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(e => {
+    const preview = e.s || e.o || e.a || e.p || '—';
+    return `
+    <div class="entry-card" id="ec-${e.id}">
+      <div class="entry-card-header" onclick="toggleEntry(${e.id})">
+        <div class="entry-header-left">
+          <div class="entry-top">
+            <span class="entry-ref">${highlight(e.ref, searchQuery)}</span>
+            <span class="entry-date">${highlight(e.date, searchQuery)}</span>
+          </div>
+          <div class="entry-preview">${highlight(preview, searchQuery)}</div>
+        </div>
+        <button class="btn-delete" onclick="promptDelete(${e.id}, '${esc(e.ref)}', event)" aria-label="Delete entry">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
+        <svg class="entry-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-      <div class="entry-preview" id="ep-${i}">${e.s || e.o || e.a || e.p || '—'}</div>
-      <div class="entry-full" id="ef-${i}">
-        ${e.verseText ? `<div class="soap-mini"><div class="soap-mini-label">Verse</div><div class="soap-mini-text" style="font-family:Georgia,serif;font-style:italic;">${e.verseText}</div></div>` : ''}
-        ${e.s ? `<div class="soap-mini"><div class="soap-mini-label">S — Scripture</div><div class="soap-mini-text">${e.s}</div></div>` : ''}
-        ${e.o ? `<div class="soap-mini"><div class="soap-mini-label">O — Observation</div><div class="soap-mini-text">${e.o}</div></div>` : ''}
-        ${e.a ? `<div class="soap-mini"><div class="soap-mini-label">A — Application</div><div class="soap-mini-text">${e.a}</div></div>` : ''}
-        ${e.p ? `<div class="soap-mini"><div class="soap-mini-label">P — Prayer</div><div class="soap-mini-text">${e.p}</div></div>` : ''}
+      <div class="entry-full">
+        ${e.verseText ? `<div class="verse-quote">${highlight(e.verseText, searchQuery)}</div>` : ''}
+        ${e.s ? `<div class="soap-mini"><div class="soap-mini-label">S — Scripture</div><div class="soap-mini-text">${highlight(e.s, searchQuery)}</div></div>` : ''}
+        ${e.o ? `<div class="soap-mini"><div class="soap-mini-label">O — Observation</div><div class="soap-mini-text">${highlight(e.o, searchQuery)}</div></div>` : ''}
+        ${e.a ? `<div class="soap-mini"><div class="soap-mini-label">A — Application</div><div class="soap-mini-text">${highlight(e.a, searchQuery)}</div></div>` : ''}
+        ${e.p ? `<div class="soap-mini"><div class="soap-mini-label">P — Prayer</div><div class="soap-mini-text">${highlight(e.p, searchQuery)}</div></div>` : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
-function toggleEntry(i) {
-  const full = document.getElementById('ef-' + i);
-  const preview = document.getElementById('ep-' + i);
-  const open = full.classList.toggle('open');
-  preview.style.display = open ? 'none' : '';
+function toggleEntry(id) {
+  const card = document.getElementById('ec-' + id);
+  if (!card) return;
+  card.classList.toggle('open');
 }
 
+/* ── Stats ── */
 function calcStreak() {
   if (!entries.length) return 0;
   const dates = [...new Set(entries.map(e => e.isoDate))].sort().reverse();
@@ -726,7 +1138,22 @@ function renderStats() {
   document.getElementById('streak-num').textContent = calcStreak();
   document.getElementById('stat-total').textContent = entries.length;
   document.getElementById('stat-this-month').textContent = thisMonth;
-  document.getElementById('stat-sections').textContent = books;
+  document.getElementById('stat-books').textContent = books;
+
+  const counts = { Torah: 0, "Nevi'im": 0, Ketuvim: 0 };
+  entries.forEach(e => { if (e.section in counts) counts[e.section]++; });
+
+  const breakdown = document.getElementById('section-breakdown');
+  if (entries.length) {
+    breakdown.innerHTML = Object.entries(counts).map(([name, n]) => `
+      <div class="section-row">
+        <span class="section-row-label">${name}</span>
+        <span class="section-row-count">${n}</span>
+      </div>
+    `).join('');
+  } else {
+    breakdown.innerHTML = '';
+  }
 }
 
 if ('serviceWorker' in navigator) {
